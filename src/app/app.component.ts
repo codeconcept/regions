@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { RegionsService } from './services/regions.service';
+import { Observable } from 'rxjs';
+import Region from './interfaces/region';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +14,9 @@ import { RegionsService } from './services/regions.service';
 })
 export class AppComponent implements OnInit {
   ngOnInit(): void {
-    this.regionsService.getRegions().subscribe();
+    this.regions$ = this.regionsService.getRegions();
   }
   title = 'regions';
-
+  regions$ = new Observable<Region[]>();
   regionsService = inject(RegionsService);
 }
