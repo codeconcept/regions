@@ -1,8 +1,8 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { RegionsService } from './services/regions.service';
-import { Observable, tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import Region from './interfaces/region';
 
 @Component({
@@ -12,9 +12,12 @@ import Region from './interfaces/region';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
   ngOnInit(): void {
-    this.regionsService
+    this.subscription = this.regionsService
       .getRegions()
       .pipe(tap((data) => this.regionsSig.set(data)))
       .subscribe();
@@ -22,4 +25,5 @@ export class AppComponent implements OnInit {
   title = 'regions';
   regionsSig = signal<Region[]>([]);
   regionsService = inject(RegionsService);
+  subscription!: Subscription;
 }
