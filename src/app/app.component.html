@@ -218,7 +218,14 @@
       </svg>
       <h1>Hello, {{ title }}</h1>
       <p>Congratulations! Your app is running. 🎉</p>
-      {{ this.regions$ | async | json }}
+      <p>
+        @for(reg of regionsSig(); track reg.Code){
+          <p>{{ reg.Name }}</p>
+        } @empty {
+          <p>Aucune région</p>
+        }
+        <!-- {{ this.regionsSig() | json }} -->
+      </p>
     </div>
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
