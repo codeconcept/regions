@@ -27,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   regionsService = inject(RegionsService);
   selectedRegionSig = this.regionsService.selectedRegionSig;
   subscription!: Subscription;
+  regionDepartmentsSig = this.regionsService.regionDepartments
 
   selectRegion(region: Region) {
     this.selectedRegionSig.set(region);

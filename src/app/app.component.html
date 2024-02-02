@@ -176,16 +176,20 @@
         @for(reg of regionsSig(); track reg.Code){
           <p (click)="selectRegion(reg)" class="region">{{ reg.Name }}</p>
         } @empty {
-          <p>Aucune région</p>
+          <div>Aucune région</div>
         }
-        <!-- {{ this.regionsSig() | json }} -->
       </p>
     </div>
     <div class="divider" role="separator" aria-label="Divider"></div>
     <div class="right-side">
       <h3>Région sélectionnée</h3>
       @if(selectedRegionSig().Code !== "-1") {
-        <p class="region">Région {{ selectedRegionSig().Name }}</p>
+        <p class="region">Région <b>{{ selectedRegionSig().Name }}</b></p>
+        <ul>
+          @for (dep of regionDepartmentsSig(); track dep.code) {
+            <li>{{ dep.nom }} ({{ dep.code }})</li>
+          }
+        </ul>
       } @else {
         <p>Pas de région sélectionnée</p>
       }
