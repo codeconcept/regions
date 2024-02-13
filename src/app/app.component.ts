@@ -9,9 +9,16 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { RegionsService } from './services/regions.service';
-import { Subscription, debounceTime, distinctUntilChanged, filter, tap } from 'rxjs';
+import {
+  Subscription,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  tap,
+} from 'rxjs';
 import Region from './interfaces/region';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import Department from './interfaces/departments';
 
 @Component({
   selector: 'app-root',
@@ -39,8 +46,8 @@ export class AppComponent implements OnInit, OnDestroy {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        filter(values => values.length > 2),
-        tap((data) => console.log({ departmentFilter: data.toUpperCase() })),
+        // filter((values) => values.length > 2),
+        tap((data) => this.departmentsFilterSig.set(data))
       )
       .subscribe();
   }
@@ -51,6 +58,19 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedRegionSig = this.regionsService.selectedRegionSig;
   subscription!: Subscription;
   departmentsSub!: Subscription;
+
+  departmentsFilterSig = signal<string>('');
+  departmentsFiltered: Department[] = [];
+  departmentsEffect = effect(() => {
+    // console.log('this.departmentsFilterSig', this.departmentsFilterSig())
+    this.departmentsFiltered = this.regionsService
+      .regionDepartments()
+      .filter((dep: Department) => {
+        return dep.nom
+          .toLocaleLowerCase()
+          .startsWith(this.departmentsFilterSig().toLocaleLowerCase());
+      });
+  });
 
   regionDepartmentsSig = this.regionsService.regionDepartments;
   filterBySig = signal<string>('');

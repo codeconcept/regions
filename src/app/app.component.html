@@ -196,7 +196,7 @@
         <p class="region">Région <b>{{ selectedRegionSig().Name }}</b></p>
         <input type="text" [formControl]="textControl">
         <ul>
-          @for (dep of regionDepartmentsSig(); track dep.code) {
+          @for (dep of departmentsFiltered; track dep.code) {
             <li>{{ dep.nom }} ({{ dep.code }})</li>
           }
         </ul>
